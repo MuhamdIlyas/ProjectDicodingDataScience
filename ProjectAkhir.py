@@ -27,7 +27,7 @@ def create_orders_daily(df):
 
 # create_sum_order() untuk menyiapkan sum_orders
 def create_sum_order(df):
-    sum_order = df.groupby("product_category_name").product_id.sum(
+    sum_order = df.groupby("product_category_name").product_id.nunique(
     ).sort_values(ascending=False).reset_index()
     return sum_order
 
@@ -73,7 +73,10 @@ max_date = all_dataset["order_approved_at"].max()
 
 with st.sidebar:
     # Menambahkan logo perusahaan
-    st.image("https://unsplash.com/photos/IHpUgFDn7zU")
+    st.title("Toko Kita")
+    st.image("https://raw.githubusercontent.com/MuhamdIlyas/ProjectDicodingDataScience/a773b6e2b6b6b1a890c7ccf635de83fc9b487de2/erica-zhou-IHpUgFDn7zU-unsplash.jpg",
+             width=None, use_column_width=None)
+    # https://unsplash.com/photos/IHpUgFDn7zU
 
     # Mengambil start_date & end_date dari date_input
     start_date, end_date = st.date_input(
@@ -81,3 +84,90 @@ with st.sidebar:
         max_value=max_date,
         value=[min_date, max_date]
     )
+
+# start_date dan end_date di atas akan digunakan untuk memfilter all_dataset. Data yang telah difilter ini selanjutnya akan disimpan dalam main_dataset
+main_dataset = all_dataset[(all_dataset["order_approved_at"] >= str(start_date)) &
+                           (all_dataset["order_approved_at"] <= str(end_date))]
+
+daily_order = create_orders_daily(main_dataset)
+sum_order = create_sum_order(main_dataset)
+state = create_state(main_dataset)
+order_status = create_order_status(main_dataset)
+# rfm_df = create_rfm_df(main_dataset)
+
+# Menambahkan Header
+st.header('Toko Kita Dashboard :sparkles:')
+
+# menampilkan informasi total order dan revenue dalam bentuk metric() yang ditampilkan menggunakan layout columns()
+st.subheader('Daily Orders')
+
+col1, col2 = st.columns(2)
+
+with col1:
+    total_orders = daily_order.order_count.sum()
+    st.metric("Total orders", value=total_orders)
+
+with col2:
+    total_revenue = format_currency(
+        daily_order.revenue.sum(), "AUD", locale='es_CO')
+    st.metric("Total Revenue", value=total_revenue)
+
+# Perfoma penjualan
+fig, ax = plt.subplots(figsize=(16, 8))
+ax.plot(
+    daily_order["order_approved_at"].values,
+    daily_order["order_count"].values,
+    marker='o',
+    linewidth=2,
+    color="#90CAF9"
+)
+ax.tick_params(axis='y', labelsize=20)
+ax.tick_params(axis='x', labelsize=15, rotation=45)
+
+st.pyplot(fig)
+
+# Menampilkan 5 produk paling laris dan paling sedikit terjual melalui sebuah visualisasi data
+st.subheader("Best & Worst Performing Product")
+
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(35, 15))
+
+colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+
+sns.barplot(x="product_id", y="product_category_name",
+            data=sum_order.head(5), palette=colors, ax=ax[0])
+ax[0].set_ylabel(None)
+ax[0].set_xlabel(None, fontsize=30)
+ax[0].set_title("Best Performing Product", loc="center", fontsize=50)
+ax[0].tick_params(axis='y', labelsize=35)
+ax[0].tick_params(axis='x', labelsize=30)
+
+sns.barplot(x="product_id", y="product_category_name", data=sum_order.sort_values(
+    by="product_id", ascending=True).head(5), palette=colors, ax=ax[1])
+ax[1].set_ylabel(None)
+ax[1].set_xlabel(None, fontsize=30)
+ax[1].invert_xaxis()
+ax[1].yaxis.set_label_position("right")
+ax[1].yaxis.tick_right()
+ax[1].set_title("Worst Performing Product", loc="center", fontsize=50)
+ax[1].tick_params(axis='y', labelsize=35)
+ax[1].tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
+
+# Menampilkan Kota Bagian (state) apa saja dengan customer terbanyak yang dimiliki perusahaan
+fig, ax = plt.subplots(figsize=(20, 10))
+colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
+          "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+sns.barplot(
+    x="customer_count",
+    y="customer_state",
+    data=state.sort_values(by="order_approved_at", ascending=False),
+    palette=colors,
+    ax=ax
+)
+ax.set_title("Number of Customer by States", loc="center", fontsize=30)
+ax.set_ylabel(None)
+ax.set_xlabel(None)
+ax.tick_params(axis='y', labelsize=20)
+ax.tick_params(axis='x', labelsize=15)
+st.pyplot(fig)
