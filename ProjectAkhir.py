@@ -148,39 +148,3 @@ ax[1].tick_params(axis='y', labelsize=35)
 ax[1].tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
-
-# # Menampilkan Kota Bagian (state) apa saja dengan customer terbanyak yang dimiliki perusahaan
-# fig, ax = plt.subplots(figsize=(20, 10))
-# colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
-#           "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
-# sns.barplot(
-#     x="customer_city",
-#     y="product_id",
-#     data=state.sort_values(by="customer_city", ascending=False),
-#     palette=colors,
-#     ax=ax
-# )
-# ax.set_title("Number of Customer by States", loc="center", fontsize=30)
-# ax.set_ylabel(None)
-# ax.set_xlabel(None)
-# ax.tick_params(axis='y', labelsize=20)
-# ax.tick_params(axis='x', labelsize=15)
-# st.pyplot(fig)
-
-# # Menampilkan proses transaksi yang paling diminati
-# fig, ax = plt.subplots(figsize=(20, 10))
-# colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
-#           "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
-# sns.barplot(
-#     x="order_status",
-#     y="product_id",
-#     data=order_status.sort_values(by="order_status", ascending=False),
-#     palette=colors,
-#     ax=ax
-# )
-# ax.set_title("Most Popular Transaction Processes", loc="center", fontsize=50)
-# ax.set_ylabel(None)
-# ax.set_xlabel(None)
-# ax.tick_params(axis='x', labelsize=35)
-# ax.tick_params(axis='y', labelsize=30)
-# st.pyplot(fig)
