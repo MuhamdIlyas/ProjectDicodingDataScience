@@ -34,10 +34,8 @@ def create_sum_order(df):
 
 # create_state() digunakan untuk menyiapkan state
 def create_state(df):
-    state = df.groupby(by="customer_city").product_id.nunique().reset_index()
-    state.rename(columns={
-        "customer_id": "customer_count"
-    }, inplace=True)
+    state = df.groupby(
+        by="customer_city").product_id.nunique().reset_index()
 
     return state
 
@@ -47,9 +45,6 @@ def create_state(df):
 def create_order_status(df):
     order_status = df.groupby(
         by="order_status").product_id.nunique().reset_index()
-    order_status.rename(columns={
-        "product_id": "customer_count"
-    }, inplace=True)
 
     return order_status
 
@@ -154,20 +149,38 @@ ax[1].tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
-# Menampilkan Kota Bagian (state) apa saja dengan customer terbanyak yang dimiliki perusahaan
-fig, ax = plt.subplots(figsize=(20, 10))
-colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
-          "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
-sns.barplot(
-    x="customer_count",
-    y="customer_state",
-    data=state.sort_values(by="order_approved_at", ascending=False),
-    palette=colors,
-    ax=ax
-)
-ax.set_title("Number of Customer by States", loc="center", fontsize=30)
-ax.set_ylabel(None)
-ax.set_xlabel(None)
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=15)
-st.pyplot(fig)
+# # Menampilkan Kota Bagian (state) apa saja dengan customer terbanyak yang dimiliki perusahaan
+# fig, ax = plt.subplots(figsize=(20, 10))
+# colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
+#           "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+# sns.barplot(
+#     x="customer_city",
+#     y="product_id",
+#     data=state.sort_values(by="customer_city", ascending=False),
+#     palette=colors,
+#     ax=ax
+# )
+# ax.set_title("Number of Customer by States", loc="center", fontsize=30)
+# ax.set_ylabel(None)
+# ax.set_xlabel(None)
+# ax.tick_params(axis='y', labelsize=20)
+# ax.tick_params(axis='x', labelsize=15)
+# st.pyplot(fig)
+
+# # Menampilkan proses transaksi yang paling diminati
+# fig, ax = plt.subplots(figsize=(20, 10))
+# colors = ["#90CAF9", "#D3D3D3", "#D3D3D3", "#D3D3D3",
+#           "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
+# sns.barplot(
+#     x="order_status",
+#     y="product_id",
+#     data=order_status.sort_values(by="order_status", ascending=False),
+#     palette=colors,
+#     ax=ax
+# )
+# ax.set_title("Most Popular Transaction Processes", loc="center", fontsize=50)
+# ax.set_ylabel(None)
+# ax.set_xlabel(None)
+# ax.tick_params(axis='x', labelsize=35)
+# ax.tick_params(axis='y', labelsize=30)
+# st.pyplot(fig)
