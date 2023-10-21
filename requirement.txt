@@ -4,4 +4,4 @@ seaborn==0.11.2
 streamlit==1.3.0
 babel==2.13.0
 numpy==1.26.0
-image==https://unsplash.com/photos/IHpUgFDn7zU
+image=='https://unsplash.com/photos/IHpUgFDn7zU'
