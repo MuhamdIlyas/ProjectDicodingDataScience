@@ -6,6 +6,7 @@ import streamlit as st
 from babel.numbers import format_currency
 sns.set(style='dark')
 
+
 # create_daily_orders() digunakan untuk menyiapkan daily_orders
 
 
