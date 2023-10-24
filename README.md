@@ -4,12 +4,12 @@
 
 ```
 conda create --name main-ds python=3.9
-conda activate main-ds
-pip install numpy pandas scipy matplotlib seaborn jupyter streamlit babel
+conda activate myenv
+pip install numpy pandas matplotlib seaborn streamlit babel
 ```
 
 ## Run steamlit app
 
 ```
-streamlit run ProjectAkhir.py
+streamlit run projectakhir.py
 ```
